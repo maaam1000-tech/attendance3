@@ -1,0 +1,53 @@
+<!doctype html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>شعبة السير — ربط API</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f7f9fc;color:#0f172a}
+header{background:#0b5cff;color:#fff;padding:14px 20px}
+.container{max-width:900px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin:12px 0}
+input,button{padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1}
+button.primary{background:#0b5cff;color:#fff;border-color:#0b5cff;cursor:pointer}
+.small{color:#64748b;font-size:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row input{flex:1;min-width:280px}
+pre{white-space:pre-wrap;background:#0b1220;color:#e2e8f0;padding:12px;border-radius:8px;overflow:auto}
+.ok{color:#166534}.err{color:#b91c1c}
+</style>
+</head><body>
+<header><strong>شعبة السير — ربط واجهة الـ API</strong></header>
+<div class="container">
+  <div class="card">
+    <p>اكتبي رابط الـ API المستضاف على Railway (مثال: <code>https://your-app.up.railway.app</code>)</p>
+    <div class="row">
+      <input id="api" placeholder="https://your-app.up.railway.app">
+      <button class="primary" id="save">حفظ</button>
+      <button id="ping">اختبار الاتصال</button>
+    </div>
+    <div class="small">يتم حفظ الرابط في المتصفح تلقائيًا (localStorage).</div>
+    <div id="msg" class="small"></div>
+  </div>
+
+  <div class="card">
+    <h3>كود مثال للاتصال</h3>
+    <pre><code id="snippet">fetch(API_BASE + '/api/health').then(r=>r.json())</code></pre>
+  </div>
+</div>
+
+<script>
+const apiInput=document.getElementById('api');
+const msg=document.getElementById('msg');
+const SNIPPET=document.getElementById('snippet');
+
+function setMsg(t, ok){ msg.textContent=t; msg.className = 'small ' + (ok?'ok':'err'); }
+function load(){ const v=localStorage.getItem('API_BASE')||''; apiInput.value=v; updateSnippet(); }
+function updateSnippet(){ const v=apiInput.value.trim()||'https://your-app.up.railway.app'; SNIPPET.textContent = "const API_BASE = '" + v + "';\nfetch(API_BASE + '/api/health').then(r=>r.json())"; }
+document.getElementById('save').onclick = ()=>{ localStorage.setItem('API_BASE', apiInput.value.trim()); updateSnippet(); setMsg('تم الحفظ ✓', true); };
+document.getElementById('ping').onclick = async ()=>{
+  const base=apiInput.value.trim(); if(!base) return setMsg('الرجاء إدخال رابط API', false);
+  try{ const r=await fetch(base + '/api/health'); const j=await r.json(); setMsg('نجح الاتصال: ' + JSON.stringify(j), true); }
+  catch(e){ setMsg('فشل الاتصال: ' + e.message, false); }
+};
+load();
+</script>
+</body></html>
