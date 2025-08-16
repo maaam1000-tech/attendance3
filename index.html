@@ -1,0 +1,23 @@
+<!doctype html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>شعبة السير — لوحة التحكم</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head><body>
+<header><strong>شعبة السير — لوحة التحكم</strong></header>
+<div class="container">
+  <div class="card">
+    <div class="controls">
+      <input id="f-id" placeholder="بحث برقم الهوية">
+      <input id="f-date" type="date">
+      <input id="f-branch" placeholder="بحث بالفرع">
+      <button id="btn-csv" class="primary">تصدير CSV</button>
+    </div>
+    <table class="table">
+      <thead><tr><th>رقم الهوية</th><th>الاسم</th><th>الفرع</th><th>التاريخ</th><th>الدخول</th><th>الخروج</th><th>الحالة</th></tr></thead>
+      <tbody id="att"></tbody>
+    </table>
+    <div class="small">اليوم: 2025-08-16</div>
+  </div>
+</div>
+<script src="assets/app.js"></script>
+</body></html>
